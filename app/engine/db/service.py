@@ -46,7 +46,10 @@ def aggregate_salary_data(dt_from: datetime, dt_upto: datetime, group_type: str)
 
             result = list(collection.aggregate(query))
 
-            dataset.append(result[0]['total_value'])
+            try:
+                dataset.append(result[0]['total_value'])
+            except IndexError:
+                dataset.append(0)
             labels.append(current_date.isoformat())
 
             current_date = next_date
