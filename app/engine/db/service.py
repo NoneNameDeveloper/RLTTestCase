@@ -31,6 +31,9 @@ def aggregate_salary_data(dt_from: datetime, dt_upto: datetime, group_type: str)
         elif group_type == "month":
             next_date = current_date + relativedelta(months=1)
 
+        if current_date == dt_upto:
+            next_date = dt_upto
+
         if next_date:
             query = [
                 {
@@ -50,11 +53,18 @@ def aggregate_salary_data(dt_from: datetime, dt_upto: datetime, group_type: str)
 
             try:
                 dataset.append(result[0]['total_value'])
-            except IndexError:
+            except:
                 dataset.append(0)
             labels.append(current_date.isoformat())
 
             current_date = next_date
+
+            # fill missings of end datetime
+            if current_date == dt_upto:
+                if dt_upto not in labels:
+                    labels.append(dt_upto.isoformat())
+                    dataset.append(0)
+                break
         else:
             break
 
