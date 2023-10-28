@@ -1,3 +1,5 @@
+import json
+
 from pymongo.collection import Collection
 
 from app.data import Config
@@ -9,7 +11,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 
-def aggregate_salary_data(dt_from: datetime, dt_upto: datetime, group_type: str) -> dict:
+def aggregate_salary_data(dt_from: datetime, dt_upto: datetime, group_type: str) -> str:
     """user input request aggregation through mongodb requests"""
     # getting collection
     collection: Collection = get_db().get_collection("sample_collection")
@@ -56,4 +58,4 @@ def aggregate_salary_data(dt_from: datetime, dt_upto: datetime, group_type: str)
         else:
             break
 
-    return {"dataset": dataset, "labels": labels}
+    return json.dumps({"dataset": dataset, "labels": labels})
